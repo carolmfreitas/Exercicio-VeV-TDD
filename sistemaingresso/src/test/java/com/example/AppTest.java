@@ -196,5 +196,25 @@ public class AppTest
             assertEquals("Desconto inválido. O desconto máximo permitido é 25%.", e.getMessage());
         }
     }
+
+    @Test
+    public void testSellNonexistentTicket() {
+        // Configuração de um show e lote
+        Show show = new Show("2024-11-30", "Davvi Duarte", 1000.00, 2000.00, true);
+        TicketBatch batch = new TicketBatch(1, 500, 0.15);
+        show.addTicketBatch(batch);
+
+        // Criação de um ingresso que não existe no lote
+        Ticket nonexistentTicket = new Ticket(999, TicketType.NORMAL);
+
+        // Tentativa de marcar como vendido um ingresso que não existe
+        try {
+            nonexistentTicket.setSold(true);
+            fail("Exception expected for non-existent ticket");
+        } catch (IllegalStateException e) {
+            assertEquals("O ingresso não pertence a nenhum lote existente.", e.getMessage());
+        }
+    }
+
 }
 
