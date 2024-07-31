@@ -216,5 +216,25 @@ public class AppTest
         }
     }
 
+    @Test
+    public void testModifyStatusOfUnsoldTicket() {
+        // Configuração de um show e lote
+        Show show = new Show("2024-11-30", "Davvi Duarte", 1000.00, 2000.00, true);
+        TicketBatch batch = new TicketBatch(1, 500, 0.15);
+        show.addTicketBatch(batch);
+
+        // Criação e venda de um ingresso
+        Ticket ticket = batch.getTickets().get(0);
+        ticket.setSold(true);
+
+        // Tentativa de marcar como vendido um ingresso já vendido
+        try {
+            ticket.setSold(true);
+            fail("Exception expected for marking an already sold ticket");
+        } catch (IllegalStateException e) {
+            assertEquals("O ingresso já foi vendido.", e.getMessage());
+        }
+    }
+
 }
 
