@@ -5,6 +5,8 @@ import java.util.List;
 
 public class TicketBatch {
     private static final double MAX_DISCOUNT = 0.25; // 25% de desconto máximo permitido
+    private static final double VIP_PROPORTION = 0.2; // 20%
+    private static final double MEIA_ENTRADA_PROPORTION = 0.1; // 10%
     private int id;
     private int ticketCount;
     private double discount;
@@ -20,12 +22,12 @@ public class TicketBatch {
         this.tickets = new ArrayList<>();
         
        // Calculando a quantidade de ingressos VIP e MEIA_ENTRADA
-       int vipCount = (int) Math.round(ticketCount * 0.2);
-       int meiaEntradaCount = (int) Math.round(ticketCount * 0.1);
+       int vipCount = (int) Math.round(ticketCount * VIP_PROPORTION);
+       int meiaEntradaCount = (int) Math.round(ticketCount * MEIA_ENTRADA_PROPORTION);
        int normalCount = ticketCount - vipCount - meiaEntradaCount;
        
        // Ajustando a quantidade de VIP se necessário
-       if (vipCount < ticketCount * 0.2) {
+       if (vipCount < ticketCount * VIP_PROPORTION) {
            vipCount++;
            normalCount--;
        } else if (vipCount > ticketCount * 0.3) {
@@ -61,6 +63,35 @@ public class TicketBatch {
     
     public List<Ticket> getTickets() { 
         return tickets; 
+    }
+
+    // Verifica as proporções dos tipos de ingressos
+    public void validateProportions() {
+        int vipCount = 0;
+        int meiaEntradaCount = 0;
+        int normalCount = 0;
+        
+        for (Ticket ticket : tickets) {
+            switch (ticket.getType()) {
+                case VIP:
+                    vipCount++;
+                    break;
+                case MEIA_ENTRADA:
+                    meiaEntradaCount++;
+                    break;
+                case NORMAL:
+                    normalCount++;
+                    break;
+            }
+        }
+        
+        int expectedVipCount = (int) Math.round(ticketCount * VIP_PROPORTION);
+        int expectedMeiaEntradaCount = (int) Math.round(ticketCount * MEIA_ENTRADA_PROPORTION);
+        int expectedNormalCount = ticketCount - expectedVipCount - expectedMeiaEntradaCount;
+
+        if (vipCount != expectedVipCount || meiaEntradaCount != expectedMeiaEntradaCount || normalCount != expectedNormalCount) {
+            throw new IllegalArgumentException("Proporções de tipos de ingressos inválidas.");
+        }
     }
 }
 

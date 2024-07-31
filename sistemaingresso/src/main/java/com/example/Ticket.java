@@ -35,4 +35,8 @@ public class Ticket {
         } 
         this.isSold = isSold; 
     }
+
+    public void setType(TicketType type) {
+        this.type = type;
+    }
 }
