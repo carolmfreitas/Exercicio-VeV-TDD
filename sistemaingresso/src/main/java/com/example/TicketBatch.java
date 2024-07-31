@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TicketBatch {
-
+    private static final double MAX_DISCOUNT = 0.25; // 25% de desconto máximo permitido
     private int id;
     private int ticketCount;
     private double discount;
     private List<Ticket> tickets;
 
     public TicketBatch(int id, int ticketCount, double discount) {
+        if (discount > MAX_DISCOUNT) {
+            throw new IllegalArgumentException("Desconto inválido. O desconto máximo permitido é 25%.");
+        }
         this.id = id;
         this.ticketCount = ticketCount;
         this.discount = discount;
