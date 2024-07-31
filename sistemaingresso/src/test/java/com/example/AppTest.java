@@ -131,5 +131,51 @@ public class AppTest
         // Verifica se a receita líquida calculada é igual à esperada
         assertEquals(expectedNetRevenue, show.calculateNetRevenue(), 0.01);
     }
+
+
+    @Test
+    public void testReportGeneration() {
+    // Configura um show com cachê do artista de R$ 1.000,00, custos de infraestrutura de R$ 2.000,00 e data especial
+    Show show = new Show("2024-11-30", "Davvi Duarte", 1000.00, 2000.00, true);
+
+    // Adiciona um lote de ingressos com 500 ingressos e 15% de desconto
+    TicketBatch batch = new TicketBatch(1, 500, 0.15);
+    for (Ticket ticket : batch.getTickets()) {
+        ticket.setSold(true); // Marca todos os ingressos como vendidos
+    }
+    show.addTicketBatch(batch);
+
+    // Calcula a receita líquida esperada
+    int totalTickets = 500;
+    int vipTickets = (int) (totalTickets * 0.20);
+    int meiaEntradaTickets = (int) (totalTickets * 0.10);
+    int normalTickets = totalTickets - vipTickets - meiaEntradaTickets;
+
+    double vipPrice = 20.00;
+    double meiaEntradaPrice = 5.00;
+    double normalPrice = 10.00;
+
+    double expectedGrossRevenue = 
+        (vipTickets * vipPrice + meiaEntradaTickets * meiaEntradaPrice + normalTickets * normalPrice) * (1 - 0.15);
+
+    double expectedTotalCost = 2000.00 * 1.15 + 1000.00;
+    double expectedNetRevenue = expectedGrossRevenue - expectedTotalCost;
+
+    // Define a saída esperada do relatório
+    String expectedReport = String.format(
+        "Show Report:\n" +
+        "Artist: Davvi Duarte\n" +
+        "Date: 2024-11-30\n" +
+        "VIP Tickets Sold: %d\n" +
+        "Meia Entrada Tickets Sold: %d\n" +
+        "Normal Tickets Sold: %d\n" +
+        "Net Revenue: %.2f\n" +
+        "Financial Status: LUCRO\n",
+        vipTickets, meiaEntradaTickets, normalTickets, expectedNetRevenue
+    );
+
+    // Verifica se o relatório gerado corresponde ao esperado
+    assertEquals(expectedReport, show.generateReport());
+}
 }
 
