@@ -145,21 +145,25 @@ public class AppTest
     }
     show.addTicketBatch(batch);
 
-    // Calcula a receita líquida esperada
+    // Calcula a receita bruta esperada
+    // Considera que 20% dos ingressos são VIP, 10% são MEIA_ENTRADA e o restante são NORMAL
     int totalTickets = 500;
     int vipTickets = (int) (totalTickets * 0.20);
     int meiaEntradaTickets = (int) (totalTickets * 0.10);
     int normalTickets = totalTickets - vipTickets - meiaEntradaTickets;
-
     double vipPrice = 20.00;
     double meiaEntradaPrice = 5.00;
     double normalPrice = 10.00;
-
     double expectedGrossRevenue = 
-        (vipTickets * vipPrice + meiaEntradaTickets * meiaEntradaPrice + normalTickets * normalPrice) * (1 - 0.15);
+        (vipTickets * vipPrice * (1 - 0.15)) +
+        (meiaEntradaTickets * meiaEntradaPrice) +
+        (normalTickets * normalPrice * (1 - 0.15));
 
-    double expectedTotalCost = 2000.00 * 1.15 + 1000.00;
-    double expectedNetRevenue = expectedGrossRevenue - expectedTotalCost;
+        // Calcula o custo total esperado com ajuste para data especial (15% adicional)
+        double expectedTotalCost = 2000.00 * 1.15 + 1000.00;
+
+        // Calcula a receita líquida esperada
+        double expectedNetRevenue = expectedGrossRevenue - expectedTotalCost;
 
     // Define a saída esperada do relatório
     String expectedReport = String.format(
