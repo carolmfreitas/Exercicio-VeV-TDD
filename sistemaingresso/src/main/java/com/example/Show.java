@@ -32,9 +32,11 @@ public class Show {
         double grossRevenue = 0;
         for (TicketBatch batch : ticketBatches) {
             for (Ticket ticket : batch.getTickets()) {
-                if (ticket.isSold()) {
-                    double price = getTicketPrice(ticket);
-                    grossRevenue += price * (1 - batch.getDiscount()); // Aplica o desconto
+                double price = getTicketPrice(ticket);
+                if (ticket.getType() == TicketType.VIP || ticket.getType() == TicketType.NORMAL) {
+                    grossRevenue += price * (1 - batch.getDiscount()); // Aplica o desconto apenas para VIP e NORMAL
+                } else {
+                    grossRevenue += price;
                 }
             }
         }

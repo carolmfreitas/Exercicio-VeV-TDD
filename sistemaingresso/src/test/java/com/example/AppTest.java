@@ -118,7 +118,9 @@ public class AppTest
         double normalPrice = 10.00;
 
         double expectedGrossRevenue = 
-            (vipTickets * vipPrice + meiaEntradaTickets * meiaEntradaPrice + normalTickets * normalPrice) * (1 - 0.15);
+            (vipTickets * vipPrice * (1 - 0.15)) +
+            (meiaEntradaTickets * meiaEntradaPrice) +
+            (normalTickets * normalPrice * (1 - 0.15));
 
         // Calcula o custo total esperado com ajuste para data especial (15% adicional)
         double expectedTotalCost = 2000.00 * 1.15 + 1000.00;
