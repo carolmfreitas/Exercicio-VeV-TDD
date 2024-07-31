@@ -3,6 +3,7 @@ package com.example;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -180,6 +181,20 @@ public class AppTest
 
     // Verifica se o relatório gerado corresponde ao esperado
     assertEquals(expectedReport, show.generateReport());
+    }
+
+
+    //testes de erro
+
+    @Test
+    public void testInvalidDiscount() {
+        // Tentativa de criar um lote com desconto inválido (acima de 25%)
+        try {
+            new TicketBatch(1, 100, 0.30); // Desconto de 30%, que é inválido
+            fail("Exception expected for invalid discount");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Desconto inválido. O desconto máximo permitido é 25%.", e.getMessage());
+        }
     }
 }
 
