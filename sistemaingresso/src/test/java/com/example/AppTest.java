@@ -176,6 +176,8 @@ public class AppTest
 
     // Verifica se o relatório gerado corresponde ao esperado
     assertEquals(expectedReport, show.generateReport());
-}
+    }
+
+
 }
 
