@@ -1,6 +1,6 @@
 package com.example;
 
 public enum TicketType {
-    NORMAL
+    NORMAL, MEIA_ENTRADA, VIP
 
 }
