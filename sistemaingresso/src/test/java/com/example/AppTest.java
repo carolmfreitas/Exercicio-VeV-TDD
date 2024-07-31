@@ -236,5 +236,26 @@ public class AppTest
         }
     }
 
+    @Test
+    public void testIncorrectTicketTypeProportions() {
+        // Criação de um lote com proporções incorretas
+        TicketBatch batch = new TicketBatch(1, 100, 0.15);
+        
+        // Manualmente alterar a proporção para ser inválida
+        for (int i = 0; i < batch.getTickets().size(); i++) {
+            if (i % 10 == 0) {
+                batch.getTickets().get(i).setType(TicketType.MEIA_ENTRADA); // Forçar um tipo inválido
+            }
+        }
+
+        // Tentativa de verificar as proporções
+        try {
+            batch.validateProportions();
+            fail("Exception expected for incorrect ticket type proportions");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Proporções de tipos de ingressos inválidas.", e.getMessage());
+        }
+    }
+
 }
 
