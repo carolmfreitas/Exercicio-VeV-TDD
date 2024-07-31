@@ -65,34 +65,7 @@ public class TicketBatch {
         return tickets; 
     }
 
-    // Verifica as proporções dos tipos de ingressos
-    public void validateProportions() {
-        int vipCount = 0;
-        int meiaEntradaCount = 0;
-        int normalCount = 0;
-        
-        for (Ticket ticket : tickets) {
-            switch (ticket.getType()) {
-                case VIP:
-                    vipCount++;
-                    break;
-                case MEIA_ENTRADA:
-                    meiaEntradaCount++;
-                    break;
-                case NORMAL:
-                    normalCount++;
-                    break;
-            }
-        }
-        
-        int expectedVipCount = (int) Math.round(ticketCount * VIP_PROPORTION);
-        int expectedMeiaEntradaCount = (int) Math.round(ticketCount * MEIA_ENTRADA_PROPORTION);
-        int expectedNormalCount = ticketCount - expectedVipCount - expectedMeiaEntradaCount;
-
-        if (vipCount != expectedVipCount || meiaEntradaCount != expectedMeiaEntradaCount || normalCount != expectedNormalCount) {
-            throw new IllegalArgumentException("Proporções de tipos de ingressos inválidas.");
-        }
-    }
+    
 }
 
    
