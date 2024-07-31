@@ -81,12 +81,53 @@ public class AppTest
 
     @Test
     public void testAddTicketBatch() {
-        Show show = new Show("2023-12-31", "Artist Name", 1000.0, 2000.0, true);
+        //criação de um show
+        Show show = new Show("2024-11-30", "Davvi Duarte", 2500.0, 5000.0, true);
         TicketBatch batch = new TicketBatch(1, 100, 0.15);
         show.addTicketBatch(batch);
 
+        //verificação se um show tem 1 lote 
         assertEquals(1, show.getTicketBatches().size());
+        //verificação de lote criado
         assertEquals(batch, show.getTicketBatches().get(0));
+    }
+
+
+
+    @Test
+    public void testCalculateNetRevenue() {
+        // Configura um show com cachê do artista de R$ 1.000,00, custos de infraestrutura de R$ 2.000,00 e data especial
+        Show show = new Show("2024-11-30", "Davvi Duarte", 1000.00, 2000.00, true);
+
+        // Adiciona um lote de ingressos com 500 ingressos e 15% de desconto
+        TicketBatch batch = new TicketBatch(1, 500, 0.15);
+        for (Ticket ticket : batch.getTickets()) {
+            ticket.setSold(true); // Marca todos os ingressos como vendidos
+        }
+        show.addTicketBatch(batch);
+
+        // Calcula a receita bruta esperada
+        // Considera que 20% dos ingressos são VIP, 10% são MEIA_ENTRADA e o restante são NORMAL
+        int totalTickets = 500;
+        int vipTickets = (int) (totalTickets * 0.20);
+        int meiaEntradaTickets = (int) (totalTickets * 0.10);
+        int normalTickets = totalTickets - vipTickets - meiaEntradaTickets;
+
+        double vipPrice = 20.00;
+        double meiaEntradaPrice = 5.00;
+        double normalPrice = 10.00;
+
+        double expectedGrossRevenue = 
+            (vipTickets * vipPrice + meiaEntradaTickets * meiaEntradaPrice + normalTickets * normalPrice) * (1 - 0.15);
+
+        // Calcula o custo total esperado com ajuste para data especial (15% adicional)
+        double expectedTotalCost = 2000.00 * 1.15 + 1000.00;
+
+        // Calcula a receita líquida esperada
+        double expectedNetRevenue = expectedGrossRevenue - expectedTotalCost;
+
+        // Verifica se a receita líquida calculada é igual à esperada
+        assertEquals(expectedNetRevenue, show.calculateNetRevenue(), 0.01);
     }
 }
 
