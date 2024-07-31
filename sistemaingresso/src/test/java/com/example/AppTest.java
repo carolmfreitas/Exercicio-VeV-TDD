@@ -205,7 +205,7 @@ public class AppTest
         show.addTicketBatch(batch);
 
         // Criação de um ingresso que não existe no lote
-        Ticket nonexistentTicket = new Ticket(999, TicketType.NORMAL);
+        Ticket nonexistentTicket = new Ticket(999, TicketType.NORMAL, null);
 
         // Tentativa de marcar como vendido um ingresso que não existe
         try {
