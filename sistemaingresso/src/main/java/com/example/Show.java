@@ -62,4 +62,47 @@ public class Show {
         }
     }
 
+
+    public String generateReport() {
+        int vipTicketsSold = getSoldTicketsByType(TicketType.VIP);
+        int meiaEntradaTicketsSold = getSoldTicketsByType(TicketType.MEIA_ENTRADA);
+        int normalTicketsSold = getSoldTicketsByType(TicketType.NORMAL);
+
+        double netRevenue = calculateNetRevenue();
+        String financialStatus = getFinancialStatus();
+
+        return String.format(
+            "Show Report:\n" +
+            "Artist: %s\n" +
+            "Date: %s\n" +
+            "VIP Tickets Sold: %d\n" +
+            "Meia Entrada Tickets Sold: %d\n" +
+            "Normal Tickets Sold: %d\n" +
+            "Net Revenue: %.2f\n" +
+            "Financial Status: %s\n",
+            artist, date, vipTicketsSold, meiaEntradaTicketsSold, normalTicketsSold, netRevenue, financialStatus
+        );
+    }
+    private String getFinancialStatus() {
+        double netRevenue = calculateNetRevenue();
+            if (netRevenue > 0) {
+                return "LUCRO";
+            } else if (netRevenue == 0) {
+                return "ESTÁVEL";
+            } else {
+                return "PREJUÍZO";
+            }
+    }
+
+    private int getSoldTicketsByType(TicketType type) {
+        int count = 0;
+        for (TicketBatch batch : ticketBatches) {
+            for (Ticket ticket : batch.getTickets()) {
+                if (ticket.isSold() && ticket.getType() == type) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 }
