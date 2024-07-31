@@ -15,7 +15,7 @@ public class TicketBatch {
         this.ticketCount = ticketCount;
         this.discount = discount;
         this.tickets = new ArrayList<>();
-        
+
        // Calculando a quantidade de ingressos VIP e MEIA_ENTRADA
        int vipCount = (int) Math.round(ticketCount * 0.2);
        int meiaEntradaCount = (int) Math.round(ticketCount * 0.1);
