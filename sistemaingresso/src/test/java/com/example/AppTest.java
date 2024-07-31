@@ -77,5 +77,16 @@ public class AppTest
         assertEquals(10, meiaEntradaCount);
         assertEquals(100 - vipCount - meiaEntradaCount, normalCount);
     }
+
+
+    @Test
+    public void testAddTicketBatch() {
+        Show show = new Show("2023-12-31", "Artist Name", 1000.0, 2000.0, true);
+        TicketBatch batch = new TicketBatch(1, 100, 0.15);
+        show.addTicketBatch(batch);
+
+        assertEquals(1, show.getTicketBatches().size());
+        assertEquals(batch, show.getTicketBatches().get(0));
+    }
 }
 
