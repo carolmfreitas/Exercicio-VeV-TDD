@@ -18,7 +18,7 @@ public class TicketBatch {
         this.ticketCount = ticketCount;
         this.discount = discount;
         this.tickets = new ArrayList<>();
-
+        
        // Calculando a quantidade de ingressos VIP e MEIA_ENTRADA
        int vipCount = (int) Math.round(ticketCount * 0.2);
        int meiaEntradaCount = (int) Math.round(ticketCount * 0.1);
@@ -33,18 +33,18 @@ public class TicketBatch {
            normalCount++;
        }
 
-       // Adicionando ingressos VIP
-       for (int i = 0; i < vipCount; i++) {
-           tickets.add(new Ticket(i + 1, TicketType.VIP));
-       }
-       // Adicionando ingressos MEIA_ENTRADA
-       for (int i = vipCount; i < vipCount + meiaEntradaCount; i++) {
-           tickets.add(new Ticket(i + 1, TicketType.MEIA_ENTRADA));
-       }
-       // Adicionando ingressos NORMAIS
-       for (int i = vipCount + meiaEntradaCount; i < ticketCount; i++) {
-           tickets.add(new Ticket(i + 1, TicketType.NORMAL));
-       }
+        // Adicionando ingressos VIP
+        for (int i = 0; i < vipCount; i++) {
+            tickets.add(new Ticket(i + 1, TicketType.VIP, this));
+        }
+        // Adicionando ingressos MEIA_ENTRADA
+        for (int i = vipCount; i < vipCount + meiaEntradaCount; i++) {
+            tickets.add(new Ticket(i + 1, TicketType.MEIA_ENTRADA, this));
+        }
+        // Adicionando ingressos NORMAIS
+        for (int i = vipCount + meiaEntradaCount; i < ticketCount; i++) {
+            tickets.add(new Ticket(i + 1, TicketType.NORMAL, this));
+        }
     }
 
     public int getId() { 
