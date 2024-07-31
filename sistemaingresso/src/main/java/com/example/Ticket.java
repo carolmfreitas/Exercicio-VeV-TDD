@@ -29,6 +29,9 @@ public class Ticket {
     public void setSold(boolean isSold) {
         if (batch == null) {
             throw new IllegalStateException("O ingresso não pertence a nenhum lote existente.");
+        }
+        if (this.isSold && isSold) {
+            throw new IllegalStateException("O ingresso já foi vendido.");
         } 
         this.isSold = isSold; 
     }
