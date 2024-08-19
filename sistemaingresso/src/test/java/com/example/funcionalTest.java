@@ -120,70 +120,67 @@ public class funcionalTest {
     // Tabelas de Decisão
     // ====================================
 
-    /**
-     * Testa a proporção de ingressos e a geração de relatórios.
-     * - Verifica se as proporções de ingressos são válidas.
-     * - Gera relatórios e verifica o estado financeiro.
-     */
     @Test
-    public void testTicketProportionsWithValidDiscount() {
-        TicketBatch batch = new TicketBatch(1, 100, 0.10);
-        int normalCount = 0;
-        int meiaEntradaCount = 0;
-        int vipCount = 0;
-
-        for (Ticket ticket : batch.getTickets()) {
-            switch (ticket.getType()) {
-                case NORMAL:
-                    normalCount++;
-                    break;
-                case MEIA_ENTRADA:
-                    meiaEntradaCount++;
-                    break;
-                case VIP:
-                    vipCount++;
-                    break;
-            }
-        }
-
-        assertTrue(vipCount >= 20 && vipCount <= 30);
-        assertEquals(10, meiaEntradaCount);
-        assertTrue(normalCount >= 60 && normalCount <= 70);
+    void caso1_lucroEsperado() {
+        Show show = new Show("Artista A", 1000.00, 2000.00, false, 500);
+        show.aplicarDesconto(0.10);
+        assertEquals(StatusFinanceiro.LUCRO, show.gerarRelatorioFinanceiro());
     }
 
     @Test
-    public void testGenerateReportWithProfit() {
-        Show show = new Show("2024-08-19", "Artista X", 1000.00, 2000.00, true);
-        TicketBatch batch = new TicketBatch(1, 500, 0.10);
-        show.addTicketBatch(batch);
-        batch.getTickets().forEach(ticket -> ticket.setSold(true));
-
-        String report = show.generateReport();
-        assertTrue(report.contains("Show Report:"));
-        assertTrue(report.contains("Artist: Artista X"));
-        assertTrue(report.contains("Date: 2024-08-19"));
-        assertTrue(report.contains("VIP Tickets Sold:"));
-        assertTrue(report.contains("Meia Entrada Tickets Sold:"));
-        assertTrue(report.contains("Normal Tickets Sold:"));
-        assertTrue(report.contains("Net Revenue:"));
-        assertTrue(report.contains("Financial Status: LUCRO"));
+    void caso2_lucroEsperadoComDesconto15() {
+        Show show = new Show("Artista A", 1000.00, 2000.00, false, 500);
+        show.aplicarDesconto(0.15);
+        assertEquals(StatusFinanceiro.LUCRO, show.gerarRelatorioFinanceiro());
     }
 
     @Test
-    public void testGenerateReportWithLoss() {
-        Show show = new Show("2024-08-19", "Artista Y", 5000.00, 2000.00, true);
-        TicketBatch batch = new TicketBatch(1, 500, 0.10);
-        show.addTicketBatch(batch);
-        batch.getTickets().forEach(ticket -> ticket.setSold(true));
+    void caso3_lucroEsperadoComDesconto25() {
+        Show show = new Show("Artista A", 1000.00, 2000.00, false, 500);
+        show.aplicarDesconto(0.25);
+        assertEquals(StatusFinanceiro.LUCRO, show.gerarRelatorioFinanceiro());
+    }
 
-        String report = show.generateReport();
-        assertTrue(report.contains("Show Report:"));
-        assertTrue(report.contains("Artist: Artista Y"));
-        assertTrue(report.contains("Date: 2024-08-19"));
-        assertTrue(report.contains("VIP Tickets Sold:"));
-        assertTrue(report.contains("Meia Entrada Tickets Sold:"));
-        assertTrue(report.contains("Normal Tickets Sold:"));
-        assertTrue(report.contains("Net Revenue:"));
-        assertTrue(report.contains("Financial Status: PREJUÍZO"));
+    @Test
+    void caso4_lucroEsperadoDataEspecial() {
+        Show show = new Show("Artista A", 1000.00, 2000.00, true, 500);
+        show.aplicarDesconto(0.10);
+        assertEquals(StatusFinanceiro.LUCRO, show.gerarRelatorioFinanceiro());
+    }
+
+    @Test
+    void caso5_prejuizoEsperadoCustoAlto() {
+        Show show = new Show("Artista B", 5000.00, 2000.00, true, 500);
+        show.aplicarDesconto(0.10);
+        assertEquals(StatusFinanceiro.PREJUIZO, show.gerarRelatorioFinanceiro());
+    }
+
+    @Test
+    void caso6_prejuizoEsperadoComDesconto15() {
+        Show show = new Show("Artista B", 5000.00, 2000.00, true, 500);
+        show.aplicarDesconto(0.15);
+        assertEquals(StatusFinanceiro.PREJUIZO, show.gerarRelatorioFinanceiro());
+    }
+
+    @Test
+    void caso7_prejuizoEsperadoComDesconto25() {
+        Show show = new Show("Artista B", 5000.00, 2000.00, true, 500);
+        show.aplicarDesconto(0.25);
+        assertEquals(StatusFinanceiro.PREJUIZO, show.gerarRelatorioFinanceiro());
+    }
+
+    @Test
+    void caso8_excecaoParaDescontoAcimaDoLimite() {
+        Show show = new Show("Artista B", 5000.00, 2000.00, true, 500);
+        assertThrows(IllegalArgumentException.class, () -> {
+            show.aplicarDesconto(0.30); // Desconto acima do limite permitido
+        });
+    }
+
+    @Test
+    void caso8_excecaoParaTipoIngressoInvalido() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Ingresso("INVALIDO", 100.00, false);
+        });
     }
 }
