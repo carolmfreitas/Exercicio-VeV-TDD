@@ -1,6 +1,6 @@
-com/example/processador/TipoPagamento.class
-com/example/processador/Fatura.class
-com/example/processador/ProcessadorDeContas.class
-com/example/App.class
-com/example/processador/Pagamento.class
-com/example/processador/Conta.class
+com\example\processador\Conta.class
+com\example\processador\TipoPagamento.class
+com\example\processador\Pagamento.class
+com\example\processador\ProcessadorDeContas.class
+com\example\processador\Fatura.class
+com\example\App.class
